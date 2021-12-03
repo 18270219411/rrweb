@@ -1,0 +1,26 @@
+{
+  "name": "record",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "art-template": "^4.13.2",
+    "express": "^4.17.1",
+    "express-art-template": "^1.0.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "jquery": "^3.5.1",
+    "mongoose": "^6.0.14",
+    "rrweb-player": "^0.7.9"
+  }
+}

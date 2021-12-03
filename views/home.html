@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>record home</title>
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+  <script  src="rrweb-player/dist/index.js"></script>
+  <script  src="rrweb/dist/rrweb.js"></script>
+  <script  src="rrweb/dist/replay/rrweb-replay.js"></script>
+  <script  src="rrweb/dist/replay/rrweb-replay-unpack.js"></script>
+  <script  src="rrweb/dist/plugins/console-replay.js"></script>
+  <script src="jQuery/dist/jquery.min.js"></script>
+  <script src="js/player.js"></script>
+</head>
+
+<body>
+  <div class="main">
+    <div class="left">
+      <div class="group-item" id="event">
+        <div class="icon event-icon"></div>
+        <div class="title">All</div>
+        <div class="count">{{allCount}}</div>
+      </div>
+    </div>
+    <div class="right">
+      {{if !allCount}}
+      <div class="empty-content">
+        <div class="empty-text">Empty~</div>
+      </div>
+      {{else}}
+      <div class="content">
+        <div class="table-box">
+          <table class="table table-hover">
+            <thead>
+              <th>序号</th>
+              <th>用户</th>
+              <th>名称</th>
+              <th>创建时间</th>
+              <th style="text-align:center;">操作</th>
+            </thead>
+            <tbody id="tbody">
+              {{each payload}}
+              <tr>
+                <td>{{$index + 1}}</td>
+                <td>{{$value.userID}}</td>
+                <td>{{$value.name}}</td>
+                <td>{{$value.createAt}}</td>
+                <td style="text-align:center;">
+                  <button value={{$value._id}} class="view-btn btn btn-primary btn-sm">查看</button>
+                  <button value={{$value._id}} class="del-btn btn btn-danger btn-sm">删除</button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{/if}}
+      <div id="record-player" class="placeholder">
+        <div id="control-panel">控制面板</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $('#event').click(function () {
+      window.location.reload();
+    })
+
+    $('#control-panel').click(function() {
+      if ($('.rr-controller').hasClass('show')) {
+        $('.rr-controller').removeClass('show')
+      } else{
+        $('.rr-controller').addClass('show')
+      }
+    })
+
+    // 查看
+    $('.view-btn').click(function () {
+      const id = $(this).val().replace(/\"/g, "");
+      const url = `/event/${id}`;
+      const method = 'get';
+      $.ajax({
+        url,
+        method,
+        success: function (res) {
+          if (res.code === 200) {
+            $('#record-player').removeClass('placeholder');
+            startPlay(document.getElementById('record-player'), JSON.parse(res.payload))
+          }
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      })
+    });
+
+    // 删除
+    $('.del-btn').click(function () {
+      const id = $(this).val().replace(/\"/g, "");
+      const url = `/event/${id}`;
+      const method = 'delete';
+      $.ajax({
+        url,
+        method,
+        success: function (res) {
+          if (res.code === 200) {
+            window.location.reload();
+            console.log(res);
+          }
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      })
+    })
+
+  </script>
+</body>
+
+</html>
